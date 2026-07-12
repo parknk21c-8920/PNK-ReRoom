@@ -12,7 +12,7 @@ export default function Header() {
         {/* 로고 & 모바일 우측 영역 */}
         <div className="flex w-full items-center justify-between md:w-auto">
           <a href="#top" className="group flex items-center justify-start gap-3">
-            <img src="/logo.jpg" alt="Logo" className="h-8 w-auto object-contain rounded-full shadow-sm md:h-14" />
+            <img src="/qr_with_logo.png" alt="QR Logo" className="h-8 w-auto object-contain rounded-lg shadow-sm md:h-14" />
             <span className="font-display text-xl font-bold tracking-tight text-ink md:text-[28px]">
               PNK Re-Room<span className="text-ink-faint">.</span>
             </span>
