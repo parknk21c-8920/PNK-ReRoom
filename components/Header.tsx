@@ -3,13 +3,13 @@ export default function Header() {
     <header className="sticky top-0 z-40 border-b border-line/60 bg-paper/80 backdrop-blur-xl backdrop-saturate-150">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-3.5 sm:flex-row sm:px-6">
         {/* 로고 */}
-        <a href="#top" className="group flex w-full items-center justify-center gap-3 sm:w-auto sm:justify-start">
-          <img src="/logo.jpg" alt="Logo" className="h-12 w-auto object-contain sm:h-14" />
-          <span className="font-display flex flex-col text-center text-lg font-bold leading-tight tracking-tight text-ink sm:text-left sm:text-2xl">
+        <a href="#top" className="group flex w-full items-center justify-start gap-3 sm:w-auto">
+          <img src="/logo.jpg" alt="Logo" className="h-8 w-auto object-contain sm:h-14" />
+          <span className="font-display flex flex-col text-left text-lg font-bold leading-tight tracking-tight text-ink sm:text-2xl">
             <span>PNK</span>
             <span>Re-Room<span className="text-ink-faint">.</span></span>
           </span>
-          <span className="ml-1 rounded-full border border-line-strong px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.22em] text-ink-soft">
+          <span className="ml-auto rounded-full border border-line-strong px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.22em] text-ink-soft sm:ml-1">
             AI Beta
           </span>
         </a>
