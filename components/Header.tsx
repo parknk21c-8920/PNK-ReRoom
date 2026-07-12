@@ -15,7 +15,7 @@ export default function Header() {
         </a>
 
         {/* 내비게이션 */}
-        <nav className="grid w-full grid-cols-4 gap-1.5 text-center text-[10px] font-bold sm:flex sm:w-auto sm:items-center sm:gap-2 sm:text-[13px]">
+        <nav className="grid w-full grid-cols-4 gap-1.5 text-center text-xs font-bold sm:flex sm:w-auto sm:items-center sm:gap-2 sm:text-sm">
           <a
             href="#styles"
             className="flex items-center justify-center rounded-full bg-orange-500 py-2 text-white shadow-xs transition-all duration-200 hover:bg-orange-600 sm:px-4"
