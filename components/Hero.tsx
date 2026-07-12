@@ -35,7 +35,7 @@ export default function Hero() {
           </h1>
 
           {/* 서브텍스트 */}
-          <p className="mt-8 max-w-2xl text-[18px] font-bold leading-[1.7] text-emerald-500 md:text-xl">
+          <p className="mt-8 max-w-2xl text-[18px] font-bold leading-[1.7] text-orange-500 md:text-xl">
             복잡한 과정 없이, 원하는 스타일만 고르세요.
             <br />
             PNK Re-Room의 AI가 지금 있는 방의 구조를 살려, 상상하던 인테리어 스타일을 눈앞에 펼쳐드립니다.
