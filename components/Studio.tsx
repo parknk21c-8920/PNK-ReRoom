@@ -5,23 +5,24 @@ import Image from 'next/image';
 import { ROOM_TYPES, STYLES } from '@/lib/constants';
 import CompareSlider from './CompareSlider';
 import Reveal from './Reveal';
-
-const LOADING_STATUSES = [
-  '공간 구조 분석 중...',
-  '스타일 요소 배치 중...',
-  '조명 및 색상 튜닝 중...',
-  '최종 고화질 렌더링 중...',
-];
+import { useLanguage } from './LanguageContext';
 
 export default function Studio() {
+  const { lang, t } = useLanguage();
+
+  const LOADING_STATUSES = [
+    t('공간 구조 분석 중...', 'Analyzing space structure...'),
+    t('스타일 요소 배치 중...', 'Placing style elements...'),
+    t('조명 및 색상 튜닝 중...', 'Tuning lighting and colors...'),
+    t('최종 고화질 렌더링 중...', 'Finalizing high-res render...'),
+  ];
+
   // 입력 상태
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [selectedRoom, setSelectedRoom] = useState(ROOM_TYPES[0].id);
   const [selectedStyle, setSelectedStyle] = useState(STYLES[0].id);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-
 
   // 생성 상태
   const [isLoading, setIsLoading] = useState(false);
@@ -43,17 +44,15 @@ export default function Studio() {
     return () => window.removeEventListener('reroom:style', onPickStyle);
   }, []);
 
-
-
   // 업로드 이미지 전처리 — Canvas로 긴 쪽 1024px 다운스케일
   const handleImageFile = (file: File) => {
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      setErrorMsg('이미지 파일(JPG, PNG, WebP)만 업로드할 수 있습니다.');
+      setErrorMsg(t('이미지 파일(JPG, PNG, WebP)만 업로드할 수 있습니다.', 'Only image files (JPG, PNG, WebP) can be uploaded.'));
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      setErrorMsg('파일 크기는 10MB를 초과할 수 없습니다.');
+      setErrorMsg(t('파일 크기는 10MB를 초과할 수 없습니다.', 'File size cannot exceed 10MB.'));
       return;
     }
 
@@ -91,10 +90,9 @@ export default function Studio() {
 
   const handleGenerate = async () => {
     if (!uploadedImage) {
-      setErrorMsg('공간 인테리어를 위해 먼저 사진을 업로드해 주세요.');
+      setErrorMsg(t('공간 인테리어를 위해 먼저 사진을 업로드해 주세요.', 'Please upload a photo first to redesign the space.'));
       return;
     }
-
 
     setIsLoading(true);
     setErrorMsg(null);
@@ -119,19 +117,18 @@ export default function Studio() {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || '이미지 생성에 실패했습니다.');
+        throw new Error(data.error || t('이미지 생성에 실패했습니다.', 'Failed to generate image.'));
       }
 
       setResultImage(`data:image/png;base64,${data.image}`);
       setGenerationTime(Number(((Date.now() - startTime) / 1000).toFixed(1)));
-
 
     } catch (err) {
       console.error(err);
       setErrorMsg(
         err instanceof Error
           ? err.message
-          : '인테리어 생성 중 오류가 발생했습니다. 다시 시도해 주세요.'
+          : t('인테리어 생성 중 오류가 발생했습니다. 다시 시도해 주세요.', 'An error occurred during generation. Please try again.')
       );
     } finally {
       clearInterval(interval);
@@ -170,7 +167,7 @@ export default function Studio() {
               STUDIO
             </span>
             <h2 className="font-display mt-4 text-3xl font-bold tracking-[-0.02em] text-ink md:text-[2.5rem]">
-              나의 리디자인 스튜디오
+              {t('나의 리디자인 스튜디오', 'My Redesign Studio')}
             </h2>
           </div>
         </Reveal>
@@ -188,20 +185,20 @@ export default function Studio() {
                     Redesign Complete
                   </span>
                   <h3 className="font-display mt-5 text-2xl font-bold tracking-tight text-ink">
-                    새로운 공간이 완성되었습니다
+                    {t('새로운 공간이 완성되었습니다', 'Your New Space is Ready')}
                   </h3>
                   <p className="mt-2 text-[13px] text-ink-faint">
                     {STYLES.find((s) => s.id === selectedStyle)?.emoji}{' '}
-                    {STYLES.find((s) => s.id === selectedStyle)?.label} 스타일 · 생성 소요{' '}
-                    {generationTime}초
+                    {lang === 'ko' ? STYLES.find((s) => s.id === selectedStyle)?.label : STYLES.find((s) => s.id === selectedStyle)?.labelEn}{' '}
+                    {lang === 'ko' ? `스타일 · 생성 소요 ${generationTime}초` : `Style · Generated in ${generationTime}s`}
                   </p>
                 </div>
 
                 <CompareSlider
                   beforeSrc={uploadedImage}
                   afterSrc={resultImage}
-                  beforeAlt="업로드한 원본 공간"
-                  afterAlt="리디자인된 공간"
+                  beforeAlt={t("업로드한 원본 공간", "Original Space")}
+                  afterAlt={t("리디자인된 공간", "Redesigned Space")}
                 />
 
                 <div className="flex w-full flex-wrap justify-center gap-3">
@@ -209,19 +206,19 @@ export default function Studio() {
                     onClick={handleDownload}
                     className="btn-premium cursor-pointer rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-paper shadow-lift hover:shadow-deep"
                   >
-                    고화질 PNG 다운로드
+                    {t('고화질 PNG 다운로드', 'Download High-Res PNG')}
                   </button>
                   <button
                     onClick={resetResult}
                     className="btn-premium cursor-pointer rounded-full border border-line-strong bg-paper px-8 py-3.5 text-sm font-semibold text-ink hover:border-ink hover:shadow-xs"
                   >
-                    다른 스타일로 다시
+                    {t('다른 스타일로 다시', 'Try Another Style')}
                   </button>
                   <button
                     onClick={resetAll}
                     className="cursor-pointer rounded-full px-6 py-3.5 text-sm font-semibold text-ink-soft transition-colors duration-200 hover:text-ink"
                   >
-                    다른 사진 업로드
+                    {t('다른 사진 업로드', 'Upload Another Photo')}
                   </button>
                 </div>
               </div>
@@ -232,7 +229,7 @@ export default function Studio() {
                 <div className="flex flex-col gap-4">
                   <label className="flex items-baseline gap-2.5 text-[15px] font-bold text-ink">
                     <span className="font-display text-[13px] text-ink-faint">01</span>
-                    원본 공간 사진 업로드
+                    {t('원본 공간 사진 업로드', 'Upload Original Photo')}
                   </label>
 
                   {!uploadedImage ? (
@@ -286,21 +283,21 @@ export default function Studio() {
                       </svg>
                       <div>
                         <p className="text-sm font-semibold text-ink">
-                          파일을 드래그하거나 클릭해서 업로드
+                          {t('파일을 드래그하거나 클릭해서 업로드', 'Drag & Drop or Click to Upload')}
                         </p>
                         <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
-                          JPG · PNG · WebP, 최대 10MB
+                          {t('JPG · PNG · WebP, 최대 10MB', 'JPG · PNG · WebP, Max 10MB')}
                           <br />
-                          업로드 시 1024px로 자동 최적화됩니다
+                          {t('업로드 시 1024px로 자동 최적화됩니다', 'Automatically optimized to 1024px upon upload')}
                         </p>
                       </div>
                     </div>
                   ) : (
                     <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-line shadow-lift">
-                      <Image src={uploadedImage} alt="업로드한 공간 미리보기" fill className="object-cover" />
+                      <Image src={uploadedImage} alt={t('업로드한 공간 미리보기', 'Preview of uploaded space')} fill className="object-cover" />
                       <button
                         onClick={resetAll}
-                        title="사진 삭제"
+                        title={t('사진 삭제', 'Delete Photo')}
                         className="absolute right-3 top-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-ink/70 text-paper backdrop-blur-md transition-all duration-200 hover:bg-ink hover:scale-110 active:scale-95"
                       >
                         ✕
@@ -314,7 +311,7 @@ export default function Studio() {
                   <div className="flex flex-col gap-4">
                     <label className="flex items-baseline gap-2.5 text-[15px] font-bold text-ink">
                       <span className="font-display text-[13px] text-ink-faint">02</span>
-                      공간 유형
+                      {t('공간 유형', 'Room Type')}
                     </label>
                     <div className="flex flex-wrap gap-2">
                       {ROOM_TYPES.map((room) => (
@@ -330,7 +327,7 @@ export default function Studio() {
                               : 'border border-line bg-paper text-ink-soft hover:border-ink-faint hover:text-ink'
                           }`}
                         >
-                          {room.label}
+                          {lang === 'ko' ? room.label : room.labelEn}
                         </button>
                       ))}
                     </div>
@@ -339,7 +336,7 @@ export default function Studio() {
                   <div className="flex flex-col gap-4">
                     <label className="flex items-baseline gap-2.5 text-[15px] font-bold text-ink">
                       <span className="font-display text-[13px] text-ink-faint">03</span>
-                      디자인 스타일
+                      {t('디자인 스타일', 'Design Style')}
                     </label>
                     <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
                       {STYLES.map((style) => (
@@ -354,7 +351,7 @@ export default function Studio() {
                         >
                           <span className="text-2xl">{style.emoji}</span>
                           <span className="text-[12px] font-bold text-ink sm:text-[13px]">
-                            {style.label}
+                            {lang === 'ko' ? style.label : style.labelEn}
                           </span>
                         </button>
                       ))}
@@ -364,7 +361,6 @@ export default function Studio() {
 
                 {/* BYOK + 에러 + 생성 버튼 (전체 폭) */}
                 <div className="flex flex-col gap-5 lg:col-span-2">
-
 
                   {errorMsg && (
                     <div
@@ -384,7 +380,7 @@ export default function Studio() {
                         : 'cursor-pointer bg-ink text-paper shadow-lift hover:shadow-deep'
                     }`}
                   >
-                    {isLoading ? '새로운 인테리어 생성 중...' : '인테리어 디자인 생성하기'}
+                    {isLoading ? t('새로운 인테리어 생성 중...', 'Generating new interior...') : t('인테리어 디자인 생성하기', 'Generate Interior Design')}
                   </button>
 
                   {isLoading && (
@@ -402,7 +398,7 @@ export default function Studio() {
                         {LOADING_STATUSES[loadingStep]}
                       </p>
                       <p className="text-[11px] text-ink-faint">
-                        첫 생성에는 약 10초가 소요됩니다. 잠시만 기다려 주세요.
+                        {t('첫 생성에는 약 10초가 소요됩니다. 잠시만 기다려 주세요.', 'The first generation takes about 10 seconds. Please wait a moment.')}
                       </p>
                     </div>
                   )}

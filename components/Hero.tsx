@@ -1,13 +1,18 @@
+"use client";
+
+import { useLanguage } from './LanguageContext';
 import CompareSlider from './CompareSlider';
 import Reveal from './Reveal';
 
-const STATS = [
-  { value: '10초', label: '평균 생성 시간' },
-  { value: '8가지', label: '인테리어 스타일' },
-  { value: '무제한', label: '무료 생성' },
-];
-
 export default function Hero() {
+  const { t } = useLanguage();
+
+  const STATS = [
+    { value: t('10초', '10 Sec'), label: t('평균 생성 시간', 'Avg. Gen Time') },
+    { value: t('8가지', '8 Types'), label: t('인테리어 스타일', 'Interior Styles') },
+    { value: t('무제한', 'Unlimited'), label: t('무료 생성', 'Free Generation') },
+  ];
+
   return (
     <section id="top" className="relative w-full overflow-hidden">
       {/* 배경 글로우 — 두 개의 원형 그래디언트로 깊이감 */}
@@ -24,21 +29,21 @@ export default function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink opacity-40" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ink" />
             </span>
-            AI 인테리어 리디자인 스튜디오
+            {t('AI 인테리어 리디자인 스튜디오', 'AI Interior Redesign Studio')}
           </p>
 
           {/* 메인 헤드라인 */}
           <h1 className="font-display max-w-[800px] text-[2.25rem] font-semibold leading-[1.3] tracking-[-0.02em] text-ink/80 sm:text-4xl md:text-[3.25rem] md:leading-[1.25]">
-            {'"사진 한 장이면 충분해요"'}
+            {t('"사진 한 장이면 충분해요"', '"One Photo is All You Need"')}
             <br />
-            당신의 공간이 10초 만에 달라집니다.
+            {t('당신의 공간이 10초 만에 달라집니다.', 'Your space changes in 10 seconds.')}
           </h1>
 
           {/* 서브텍스트 */}
           <p className="mt-8 max-w-2xl text-[18px] font-bold leading-[1.7] text-orange-500 md:text-xl">
-            복잡한 과정 없이, 원하는 스타일만 고르세요.
+            {t('복잡한 과정 없이, 원하는 스타일만 고르세요.', 'Choose your desired style without the hassle.')}
             <br />
-            PNK Re-Room의 AI가 지금 있는 방의 구조를 살려, 상상하던 인테리어 스타일을 눈앞에 펼쳐드립니다.
+            {t('PNK Re-Room의 AI가 지금 있는 방의 구조를 살려, 상상하던 인테리어 스타일을 눈앞에 펼쳐드립니다.', "PNK Re-Room's AI preserves your room's layout and brings your dream interior to life.")}
           </p>
 
           {/* CTA */}
@@ -47,13 +52,13 @@ export default function Hero() {
               href="#studio"
               className="btn-premium rounded-full bg-ink px-9 py-4 text-base font-semibold text-paper shadow-lift hover:shadow-deep"
             >
-              지금 무료로 디자인하기
+              {t('지금 무료로 디자인하기', 'Start Designing for Free')}
             </a>
             <a
               href="#styles"
               className="btn-premium rounded-full border border-line-strong bg-paper px-8 py-4 text-base font-semibold text-ink hover:border-ink hover:shadow-xs"
             >
-              스타일 둘러보기
+              {t('스타일 둘러보기', 'Browse Styles')}
             </a>
           </div>
 
@@ -83,7 +88,7 @@ export default function Hero() {
             priority
           />
           <p className="mt-5 text-[13px] tracking-wide text-ink-faint">
-            핸들을 좌우로 드래그해 재팬디 스타일 변신을 직접 확인해 보세요.
+            {t('핸들을 좌우로 드래그해 재팬디 스타일 변신을 직접 확인해 보세요.', 'Drag the handle left and right to see the Japandi style transformation.')}
           </p>
         </Reveal>
       </div>

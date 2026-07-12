@@ -1,6 +1,9 @@
 'use client';
 
+import { useLanguage } from './LanguageContext';
+
 export default function Footer() {
+  const { t } = useLanguage();
 
   return (
     <footer className="w-full border-t border-line">
@@ -16,7 +19,7 @@ export default function Footer() {
 
         {/* 우측: 원가 정보 + 잔여 배지 + API 링크 */}
         <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] text-ink-faint">
-          <span>이미지 1장 원가 약 70원 · Nano Banana 2 기준</span>
+          <span>{t('이미지 1장 원가 약 70원 · Nano Banana 2 기준', 'Approx. cost per image: 70 KRW · Based on Nano Banana 2')}</span>
         </div>
       </div>
     </footer>

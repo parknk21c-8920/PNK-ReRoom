@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from 'react';
+import { useLanguage } from '@/components/LanguageContext';
 
 export default function Header() {
-  const [lang, setLang] = useState<'ko' | 'en'>('ko');
+  const { lang, setLang } = useLanguage();
 
   return (
     <header className="sticky top-0 z-40 border-b border-line/60 bg-paper/80 backdrop-blur-xl backdrop-saturate-150">

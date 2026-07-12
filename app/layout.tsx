@@ -54,6 +54,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { LanguageProvider } from "@/components/LanguageContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -62,7 +64,9 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`h-full antialiased ${notoSerif.variable}`}>
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );
