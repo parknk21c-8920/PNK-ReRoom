@@ -4,7 +4,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-3.5 sm:flex-row sm:px-6">
         {/* 로고 */}
         <a href="#top" className="group flex w-full items-center justify-start gap-3 sm:w-auto">
-          <img src="/logo.jpg" alt="Logo" className="h-8 w-auto object-contain sm:h-14" />
+          <img src="/logo.jpg" alt="Logo" className="h-8 w-auto object-contain rounded-full shadow-sm sm:h-14" />
           <span className="font-display text-2xl font-bold tracking-tight text-ink sm:text-[28px]">
             PNK Re-Room<span className="text-ink-faint">.</span>
           </span>
