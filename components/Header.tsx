@@ -5,9 +5,8 @@ export default function Header() {
         {/* 로고 */}
         <a href="#top" className="group flex w-full items-center justify-start gap-3 sm:w-auto">
           <img src="/logo.jpg" alt="Logo" className="h-8 w-auto object-contain sm:h-14" />
-          <span className="font-display flex flex-col text-left text-lg font-bold leading-tight tracking-tight text-ink sm:text-2xl">
-            <span>PNK</span>
-            <span>Re-Room<span className="text-ink-faint">.</span></span>
+          <span className="font-display text-2xl font-bold tracking-tight text-ink sm:text-[28px]">
+            PNK Re-Room<span className="text-ink-faint">.</span>
           </span>
           <span className="ml-auto rounded-full border border-line-strong px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.22em] text-ink-soft sm:ml-1">
             AI Beta
