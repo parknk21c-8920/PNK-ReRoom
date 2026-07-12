@@ -21,27 +21,27 @@ const STEPS = [
 export default function HowItWorks() {
   return (
     <section id="how-it-works" className="w-full border-t border-line">
-      <div className="mx-auto max-w-6xl px-6 py-24">
+      <div className="mx-auto max-w-6xl px-6 py-28">
         <Reveal>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-clay">
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-ink-faint">
             How it works
           </p>
-          <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-ink md:text-4xl">
+          <h2 className="font-display mt-4 text-3xl font-bold tracking-[-0.02em] text-ink md:text-[2.5rem]">
             세 단계면 충분합니다
           </h2>
         </Reveal>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-3">
+        <div className="mt-14 grid gap-5 md:grid-cols-3">
           {STEPS.map((step, i) => (
-            <Reveal key={step.no} delay={i * 100}>
-              <div className="flex h-full flex-col rounded-2xl border border-line bg-paper-raised p-7">
-                <span className="font-display text-sm font-bold text-clay">
+            <Reveal key={step.no} delay={i * 120}>
+              <div className="card-tactile flex h-full flex-col rounded-2xl border border-line bg-paper-raised p-8">
+                <span className="font-display text-[13px] font-bold text-ink-faint">
                   {step.no}
                 </span>
-                <h3 className="font-display mt-5 text-xl font-bold text-ink">
+                <h3 className="font-display mt-6 text-xl font-bold tracking-tight text-ink">
                   {step.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+                <p className="mt-3 text-[13px] leading-[1.7] text-ink-soft">
                   {step.desc}
                 </p>
               </div>

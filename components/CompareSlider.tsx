@@ -75,7 +75,7 @@ export default function CompareSlider({
         className="object-cover"
         draggable={false}
       />
-      <span className="absolute bottom-4 right-4 rounded-md bg-ink/70 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-paper backdrop-blur-sm">
+      <span className="absolute bottom-4 right-4 rounded-lg bg-ink/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-paper backdrop-blur-md">
         Before
       </span>
 
@@ -93,16 +93,17 @@ export default function CompareSlider({
           className="object-cover"
           draggable={false}
         />
-        <span className="absolute bottom-4 left-4 rounded-md bg-clay px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-paper">
+        <span className="absolute bottom-4 left-4 rounded-lg bg-ink px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-paper">
           After
         </span>
       </div>
 
-      {/* 핸들 */}
+      {/* 핸들 라인 */}
       <div
-        className="absolute inset-y-0 w-0.5 bg-paper shadow-[0_0_12px_rgba(33,27,19,0.4)]"
+        className="absolute inset-y-0 w-px bg-paper/90"
         style={{ left: `${pos}%` }}
       >
+        {/* 핸들 버튼 — 펄스 링 애니메이션 */}
         <button
           type="button"
           role="slider"
@@ -111,10 +112,10 @@ export default function CompareSlider({
           aria-valuemax={100}
           aria-valuenow={Math.round(pos)}
           onKeyDown={onKeyDown}
-          className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full border border-line bg-paper-raised text-ink shadow-deep transition-transform duration-200 group-hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay"
+          className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full border-2 border-paper bg-paper text-ink shadow-deep transition-transform duration-300 group-hover:scale-110 focus:outline-none animate-pulse-ring"
         >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-            <path d="M4 3L1 7l3 4M10 3l3 4-3 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M5 3L2 8l3 5M11 3l3 5-3 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       </div>

@@ -11,28 +11,46 @@ const notoSerif = Noto_Serif_KR({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://reroom-ai.vercel.app"),
-  title: "ReRoom AI — 사진 한 장으로 완성하는 AI 인테리어 리디자인",
+  title: "PNK Re-Room — 사진 한 장으로 완성하는 AI 인테리어 리디자인",
   description:
-    "방 사진을 올리고 스타일을 고르면, AI가 10초 만에 공간을 다시 디자인합니다. 벽과 창문 구조는 그대로, 분위기는 완전히 새롭게.",
+    "사진 한 장으로 내 방을 호텔, 카페, 북유럽 스타일로 순식간에 바꿔보세요. 클릭 한 번으로 경험하는 무료 AI 인테리어 디자이너.",
+  keywords: [
+    "AI 인테리어",
+    "인테리어 디자인",
+    "방 꾸미기",
+    "PNK Re-Room",
+    "리룸",
+    "생성형 AI",
+  ],
   openGraph: {
-    title: "ReRoom AI — 사진 한 장으로 완성하는 AI 인테리어 리디자인",
-    description:
-      "방 사진을 올리고 스타일을 고르면, AI가 10초 만에 공간을 다시 디자인합니다.",
+    title: "PNK Re-Room — 사진 한 장으로 완성하는 AI 인테리어 리디자인",
+    description: "내 방 사진을 올리면 AI가 새로운 스타일로 즉시 바꿔드립니다.",
     url: "https://reroom-ai.vercel.app",
-    siteName: "ReRoom AI",
+    siteName: "PNK Re-Room",
     images: [
       {
-        url: "/living_room_after.png",
+        url: "/og-image.png",
         width: 1200,
-        height: 1200,
-        alt: "ReRoom AI 재팬디 스타일 리디자인 쇼케이스",
+        height: 630,
+        alt: "PNK Re-Room — AI 인테리어 리디자인 서비스",
       },
     ],
     locale: "ko_KR",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "PNK Re-Room — 사진 한 장으로 완성하는 AI 인테리어 리디자인",
+    description: "내 방 사진을 올리면 AI가 새로운 스타일로 즉시 바꿔드립니다.",
+    images: ["/og-image.png"],
+  },
   icons: {
     icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

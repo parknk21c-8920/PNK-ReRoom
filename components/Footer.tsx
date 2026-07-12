@@ -1,23 +1,22 @@
+'use client';
+
 export default function Footer() {
+
   return (
     <footer className="w-full border-t border-line">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-10 text-xs text-ink-faint md:flex-row">
-        <div className="flex items-baseline gap-2">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-5 px-6 py-12 md:flex-row">
+        {/* 좌측: 로고 + 카피라이트 */}
+        <div className="flex items-center gap-3 text-[11px] text-ink-faint">
           <span className="font-display text-sm font-bold text-ink">
-            ReRoom<span className="text-clay">.</span>
+            PNK Re-Room<span className="text-ink-faint">.</span>
           </span>
-          <span>© 2026 ReRoom AI. All rights reserved.</span>
+          <span className="h-3 w-px bg-line" />
+          <span>© 2026 PNK Re-Room</span>
         </div>
-        <div className="flex items-center gap-4">
+
+        {/* 우측: 원가 정보 + 잔여 배지 + API 링크 */}
+        <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] text-ink-faint">
           <span>이미지 1장 원가 약 70원 · Nano Banana 2 기준</span>
-          <a
-            href="https://aistudio.google.com/apikey"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold text-ink-soft transition-colors hover:text-clay"
-          >
-            무료 API 키 발급
-          </a>
         </div>
       </div>
     </footer>

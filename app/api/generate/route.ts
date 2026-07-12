@@ -1,32 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
-import { DAILY_IP_LIMIT, ROOM_TYPES, STYLES } from '@/lib/constants';
+import { ROOM_TYPES, STYLES } from '@/lib/constants';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
-
-// IP당 일일 제한을 관리하기 위한 인메모리 맵
-// key: IP주소, value: { count: number, resetAt: number }
-const ipLimits = new Map<string, { count: number; resetAt: number }>();
-
-function getIpUsage(ip: string): { allowed: boolean } {
-  const now = Date.now();
-  const limit = ipLimits.get(ip);
-
-  // 첫 요청이거나 24시간 윈도우가 지난 경우 초기화
-  if (!limit || now > limit.resetAt) {
-    ipLimits.set(ip, { count: 0, resetAt: now + 24 * 60 * 60 * 1000 });
-    return { allowed: true };
-  }
-
-  return { allowed: limit.count < DAILY_IP_LIMIT };
-}
-
-// 생성 성공 시에만 카운트를 차감해 실패한 요청이 횟수를 소모하지 않도록 한다
-function consumeIpUsage(ip: string) {
-  const limit = ipLimits.get(ip);
-  if (limit) limit.count += 1;
-}
 
 export async function POST(req: NextRequest) {
   try {
@@ -39,7 +16,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { image, roomTypeId, styleId, byokKey } = await req.json();
+    const { image, roomTypeId, styleId } = await req.json();
 
     if (!image || typeof image !== 'string') {
       return NextResponse.json(
@@ -57,29 +34,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const ip =
-      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      req.headers.get('x-real-ip') ||
-      '127.0.0.1';
-
-    // API 키 결정 (BYOK 우선, 없으면 서버 환경변수 키)
-    const apiKey = (typeof byokKey === 'string' && byokKey.trim()) || process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey || apiKey === 'your_gemini_api_key_here') {
       return NextResponse.json(
-        { error: '서버의 GEMINI_API_KEY가 설정되지 않았습니다. "내 API 키" 모드를 켜고 개인 키를 입력해 주세요.' },
+        { error: '서버에 API 키가 설정되지 않았습니다. 관리자에게 문의해 주세요.' },
         { status: 500 }
-      );
-    }
-
-    // 데모 모드(서버 제공 키)인 경우에만 IP당 일일 제한 검증
-    const isDemoMode = !byokKey;
-    if (isDemoMode && !getIpUsage(ip).allowed) {
-      return NextResponse.json(
-        {
-          error: `데모 일일 제한(IP당 하루 ${DAILY_IP_LIMIT}회)을 초과했습니다. 무제한 사용을 위해 "내 API 키로 무제한 사용" 모드를 켜고 무료 API 키를 등록해 주세요.`,
-        },
-        { status: 429 }
       );
     }
 
@@ -134,8 +94,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
-    if (isDemoMode) consumeIpUsage(ip);
 
     return NextResponse.json({ image: imageBase64 });
   } catch (error) {

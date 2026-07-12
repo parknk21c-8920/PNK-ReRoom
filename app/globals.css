@@ -2,35 +2,41 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── ReRoom AI 디자인 토큰 · 에디토리얼 인테리어 팔레트 ── */
-  --color-paper: #f6f3ee; /* 웜 아이보리 배경 */
-  --color-paper-raised: #fdfcfa; /* 카드 표면 */
-  --color-sand: #ece6db; /* 채움용 웜 그레이 */
-  --color-line: #e2dbcf; /* 웜 보더 */
-  --color-line-strong: #cfc5b4;
-  --color-ink: #211b13; /* 웜 잉크 */
-  --color-ink-soft: #6f6555; /* 보조 텍스트 */
-  --color-ink-faint: #a49a88; /* 캡션/힌트 */
-  --color-clay: #b0562f; /* 테라코타 액센트 */
-  --color-clay-deep: #8f4123;
-  --color-clay-soft: #f3e4da;
+  /* ── ReRoom AI 디자인 토큰 · 프리미엄 화이트 & 블랙 팔레트 ── */
+  --color-paper: #ffffff;
+  --color-paper-raised: #fafafa;
+  --color-sand: #f5f5f5;
+  --color-line: #ebebeb;
+  --color-line-strong: #d4d4d4;
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #525252;
+  --color-ink-faint: #a3a3a3;
+  --color-accent: #0a0a0a;
+  --color-accent-hover: #262626;
+  --color-accent-soft: #f5f5f5;
 
   --font-sans: "Pretendard Variable", "Pretendard", -apple-system,
     BlinkMacSystemFont, system-ui, Roboto, sans-serif;
   --font-display: var(--font-noto-serif), "Noto Serif KR", ui-serif, serif;
 
-  --shadow-lift: 0 1px 2px rgb(33 27 19 / 0.04), 0 8px 24px rgb(33 27 19 / 0.06);
-  --shadow-deep: 0 2px 6px rgb(33 27 19 / 0.08), 0 24px 64px rgb(33 27 19 / 0.16);
+  /* ── 그림자 단계 (3-tier) ── */
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-lift: 0 1px 3px rgb(0 0 0 / 0.05), 0 8px 20px rgb(0 0 0 / 0.06);
+  --shadow-deep: 0 2px 8px rgb(0 0 0 / 0.07), 0 20px 56px rgb(0 0 0 / 0.10);
 
+  /* ── 커브 ── */
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --animate-fade-in: fade-in 0.5s var(--ease-premium) both;
+  /* ── 애니메이션 ── */
+  --animate-fade-in: fade-in 0.6s var(--ease-premium) both;
   --animate-shimmer: shimmer 2.2s linear infinite;
+  --animate-pulse-ring: pulse-ring 2s var(--ease-premium) infinite;
 
   @keyframes fade-in {
     from {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(12px);
     }
     to {
       opacity: 1;
@@ -39,15 +45,22 @@
   }
 
   @keyframes shimmer {
-    from {
-      background-position: 200% 0;
-    }
-    to {
-      background-position: -200% 0;
-    }
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+  }
+
+  @keyframes pulse-ring {
+    0%, 100% { box-shadow: 0 0 0 0 rgb(10 10 10 / 0.15); }
+    50%      { box-shadow: 0 0 0 6px rgb(10 10 10 / 0); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
   }
 }
 
+/* ── 기본 ── */
 html {
   scroll-behavior: smooth;
 }
@@ -59,59 +72,99 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "ss05";
-  word-break: keep-all; /* 한국어 어절 단위 줄바꿈 */
+  word-break: keep-all;
+  letter-spacing: -0.01em; /* 한국어 타이트닝 */
 }
 
-/* 종이 질감 그레인 오버레이 */
+/* ── 미세 그레인 텍스처 오버레이 ── */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.35;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.13 0 0 0 0 0.11 0 0 0 0 0.08 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.18;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* 스크롤 리빌 */
+/* ── 스크롤 리빌 ── */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.9s var(--ease-premium), transform 0.9s var(--ease-premium);
+  transform: translateY(32px);
+  transition:
+    opacity 0.8s var(--ease-premium),
+    transform 0.8s var(--ease-premium);
 }
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* 리빌 내 자식에 순차 등장 스태거 */
+.reveal.is-visible > .stagger { animation: fade-in 0.5s var(--ease-premium) both; }
+.reveal.is-visible > .stagger:nth-child(1) { animation-delay: 0ms; }
+.reveal.is-visible > .stagger:nth-child(2) { animation-delay: 80ms; }
+.reveal.is-visible > .stagger:nth-child(3) { animation-delay: 160ms; }
+.reveal.is-visible > .stagger:nth-child(4) { animation-delay: 240ms; }
+
+/* ── 프리미엄 버튼 공통 트랜지션 ── */
+.btn-premium {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.3s var(--ease-spring),
+    box-shadow 0.3s var(--ease-premium),
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+.btn-premium:hover  { transform: translateY(-2px); }
+.btn-premium:active { transform: translateY(0) scale(0.98); }
+
+/* ── 택타일 카드 (스타일 갤러리 & 스튜디오) ── */
+.card-tactile {
+  transition:
+    transform 0.35s var(--ease-spring),
+    box-shadow 0.35s var(--ease-premium),
+    border-color 0.25s ease;
+}
+.card-tactile:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-deep);
+}
+
+/* 선택된 카드 — 2px 링 + 내부 글로우 */
+.card-tactile[data-selected="true"] {
+  border-color: var(--color-ink);
+  box-shadow:
+    0 0 0 2px var(--color-ink),
+    0 2px 12px rgb(0 0 0 / 0.08);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  .reveal,
+  .btn-premium,
+  .card-tactile {
     opacity: 1;
     transform: none;
     transition: none;
+    animation: none;
   }
-  html {
-    scroll-behavior: auto;
-  }
+  html { scroll-behavior: auto; }
 }
 
-/* 스크롤바 */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-paper);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-line-strong);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ink-faint);
-}
+/* ── 스크롤바 ── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: var(--color-line-strong); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink-faint); }
 
 ::selection {
   background: var(--color-ink);
   color: var(--color-paper);
+}
+
+/* ── 포커스 링 ── */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
 }

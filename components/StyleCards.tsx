@@ -11,31 +11,28 @@ export default function StyleCards() {
   };
 
   return (
-    <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div className="mt-14 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-4">
       {STYLES.map((style, i) => (
-        <Reveal key={style.id} delay={i * 60}>
+        <Reveal key={style.id} delay={i * 70}>
           <button
             type="button"
             onClick={() => pickStyle(style.id)}
-            className="group flex h-full w-full cursor-pointer flex-col justify-between rounded-2xl border border-line bg-paper p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-line-strong hover:shadow-lift"
+            className="card-tactile group flex h-full w-full cursor-pointer flex-col justify-between rounded-2xl border border-line bg-paper p-5 text-left sm:p-6"
           >
-            <div className="flex items-center gap-1.5">
-              {style.swatch.map((color) => (
-                <span
-                  key={color}
-                  className="h-5 w-5 rounded-full border border-ink/10"
-                  style={{ backgroundColor: color }}
-                />
-              ))}
-            </div>
-            <div className="mt-8">
-              <h3 className="font-display text-lg font-bold text-ink">
+            {/* 이모지 — 호버 시 살짝 바운스 */}
+            <span className="block text-3xl transition-transform duration-300 group-hover:scale-110 sm:text-4xl">
+              {style.emoji}
+            </span>
+
+            <div className="mt-7">
+              <h3 className="font-display text-base font-bold tracking-tight text-ink sm:text-lg">
                 {style.label}
               </h3>
-              <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">
+              <p className="mt-1.5 text-[11px] leading-relaxed text-ink-soft sm:text-xs">
                 {style.desc}
               </p>
-              <p className="mt-4 text-xs font-semibold text-clay opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              {/* 호버 시 등장하는 CTA */}
+              <p className="mt-4 text-[11px] font-semibold text-ink-faint opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100 sm:text-xs">
                 이 스타일로 디자인하기 →
               </p>
             </div>

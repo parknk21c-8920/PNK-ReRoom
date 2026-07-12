@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { FREE_GENERATIONS, ROOM_TYPES, STYLES } from '@/lib/constants';
-import { useLocalStorage } from '@/lib/useLocalStorage';
+import { ROOM_TYPES, STYLES } from '@/lib/constants';
 import CompareSlider from './CompareSlider';
 import Reveal from './Reveal';
 
@@ -22,15 +21,7 @@ export default function Studio() {
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 무료 체험 횟수 + BYOK (localStorage와 동기화)
-  const [freeCountRaw, setFreeCountRaw] = useLocalStorage(
-    'reroom_free_generations',
-    String(FREE_GENERATIONS)
-  );
-  const freeCount = Number(freeCountRaw);
-  const [byokModeRaw, setByokModeRaw] = useLocalStorage('reroom_byok_mode', 'false');
-  const byokMode = byokModeRaw === 'true';
-  const [byokKey, setByokKey] = useLocalStorage('reroom_byok_key', '');
+
 
   // 생성 상태
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +43,7 @@ export default function Studio() {
     return () => window.removeEventListener('reroom:style', onPickStyle);
   }, []);
 
-  const handleByokToggle = () => setByokModeRaw(String(!byokMode));
+
 
   // 업로드 이미지 전처리 — Canvas로 긴 쪽 1024px 다운스케일
   const handleImageFile = (file: File) => {
@@ -103,16 +94,7 @@ export default function Studio() {
       setErrorMsg('공간 인테리어를 위해 먼저 사진을 업로드해 주세요.');
       return;
     }
-    if (!byokMode && freeCount <= 0) {
-      setErrorMsg(
-        `무료 체험 횟수(${FREE_GENERATIONS}회)를 모두 사용하셨습니다. "내 API 키로 무제한 사용" 토글을 켜고 무료 발급받은 개인 API 키를 등록해 주세요.`
-      );
-      return;
-    }
-    if (byokMode && !byokKey.trim()) {
-      setErrorMsg('API 키가 입력되지 않았습니다. AI Studio에서 발급받은 API 키를 입력해 주세요.');
-      return;
-    }
+
 
     setIsLoading(true);
     setErrorMsg(null);
@@ -132,7 +114,6 @@ export default function Studio() {
           image: uploadedImage,
           roomTypeId: selectedRoom,
           styleId: selectedStyle,
-          byokKey: byokMode ? byokKey.trim() : null,
         }),
       });
 
@@ -144,9 +125,7 @@ export default function Studio() {
       setResultImage(`data:image/png;base64,${data.image}`);
       setGenerationTime(Number(((Date.now() - startTime) / 1000).toFixed(1)));
 
-      if (!byokMode) {
-        setFreeCountRaw(String(Math.max(0, freeCount - 1)));
-      }
+
     } catch (err) {
       console.error(err);
       setErrorMsg(
@@ -164,7 +143,7 @@ export default function Studio() {
     if (!resultImage) return;
     const link = document.createElement('a');
     link.href = resultImage;
-    link.download = `reroom_${selectedRoom}_${selectedStyle}.png`;
+    link.download = `pnk_reroom_${selectedRoom}_${selectedStyle}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -184,38 +163,35 @@ export default function Studio() {
 
   return (
     <section id="studio" className="w-full scroll-mt-16 border-t border-line">
-      <div className="mx-auto max-w-6xl px-6 py-24">
+      <div className="mx-auto max-w-6xl px-6 py-28">
         <Reveal>
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-clay">
-                Studio
-              </p>
-              <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-ink md:text-4xl">
-                나의 리디자인 스튜디오
-              </h2>
-            </div>
-            <span className="rounded-full border border-line bg-paper-raised px-4 py-2 text-xs font-semibold text-ink-soft">
-              {byokMode
-                ? '내 API 키로 무제한 사용 중'
-                : `무료 체험 ${FREE_GENERATIONS}회 중 ${freeCount}회 남음`}
-            </span>
+          <div className="flex flex-col">
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-ink-faint">
+              Studio
+            </p>
+            <h2 className="font-display mt-4 text-3xl font-bold tracking-[-0.02em] text-ink md:text-[2.5rem]">
+              나의 리디자인 스튜디오
+            </h2>
           </div>
         </Reveal>
 
-        <Reveal delay={100} className="mt-10">
+        <Reveal delay={100} className="mt-12">
           <div className="rounded-3xl border border-line bg-paper-raised p-6 shadow-lift md:p-10">
             {resultImage && uploadedImage ? (
               /* ── 생성 완료 결과 ── */
               <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-8 animate-fade-in">
                 <div className="text-center">
-                  <span className="rounded-full bg-clay px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-paper">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-paper">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
                     Redesign Complete
                   </span>
-                  <h3 className="font-display mt-4 text-2xl font-bold text-ink">
+                  <h3 className="font-display mt-5 text-2xl font-bold tracking-tight text-ink">
                     새로운 공간이 완성되었습니다
                   </h3>
-                  <p className="mt-1.5 text-xs text-ink-faint">
+                  <p className="mt-2 text-[13px] text-ink-faint">
+                    {STYLES.find((s) => s.id === selectedStyle)?.emoji}{' '}
                     {STYLES.find((s) => s.id === selectedStyle)?.label} 스타일 · 생성 소요{' '}
                     {generationTime}초
                   </p>
@@ -231,19 +207,19 @@ export default function Studio() {
                 <div className="flex w-full flex-wrap justify-center gap-3">
                   <button
                     onClick={handleDownload}
-                    className="cursor-pointer rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-paper shadow-lift transition-all duration-200 hover:bg-clay active:scale-95"
+                    className="btn-premium cursor-pointer rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-paper shadow-lift hover:shadow-deep"
                   >
                     고화질 PNG 다운로드
                   </button>
                   <button
                     onClick={resetResult}
-                    className="cursor-pointer rounded-full border border-line-strong bg-paper-raised px-8 py-3.5 text-sm font-semibold text-ink transition-all duration-200 hover:border-ink active:scale-95"
+                    className="btn-premium cursor-pointer rounded-full border border-line-strong bg-paper px-8 py-3.5 text-sm font-semibold text-ink hover:border-ink hover:shadow-xs"
                   >
-                    다른 스타일로 다시 디자인
+                    다른 스타일로 다시
                   </button>
                   <button
                     onClick={resetAll}
-                    className="cursor-pointer rounded-full px-6 py-3.5 text-sm font-semibold text-ink-soft transition-colors hover:text-ink"
+                    className="cursor-pointer rounded-full px-6 py-3.5 text-sm font-semibold text-ink-soft transition-colors duration-200 hover:text-ink"
                   >
                     다른 사진 업로드
                   </button>
@@ -251,11 +227,11 @@ export default function Studio() {
               </div>
             ) : (
               /* ── 입력 단계 ── */
-              <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-12">
+              <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-14">
                 {/* 01. 업로드 */}
-                <div className="flex flex-col gap-3">
-                  <label className="flex items-baseline gap-2 text-base font-bold text-ink">
-                    <span className="font-display text-sm text-clay">01</span>
+                <div className="flex flex-col gap-4">
+                  <label className="flex items-baseline gap-2.5 text-[15px] font-bold text-ink">
+                    <span className="font-display text-[13px] text-ink-faint">01</span>
                     원본 공간 사진 업로드
                   </label>
 
@@ -280,10 +256,10 @@ export default function Studio() {
                           fileInputRef.current?.click();
                         }
                       }}
-                      className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-300 ${
+                      className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center gap-5 rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-300 ${
                         isDragOver
-                          ? 'scale-[0.99] border-clay bg-clay-soft'
-                          : 'border-line-strong bg-paper hover:border-ink-faint'
+                          ? 'scale-[0.98] border-ink bg-accent-soft'
+                          : 'border-line-strong bg-paper hover:border-ink-faint hover:bg-sand/50'
                       }`}
                     >
                       <input
@@ -297,22 +273,22 @@ export default function Studio() {
                         }}
                       />
                       <svg
-                        width="36"
-                        height="36"
+                        width="40"
+                        height="40"
                         viewBox="0 0 24 24"
                         fill="none"
                         aria-hidden="true"
                         className="text-ink-faint"
                       >
-                        <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.5" />
+                        <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.4" />
                         <circle cx="9" cy="9" r="1.8" fill="currentColor" />
-                        <path d="M4 17l5-5 4 4 3-3 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                        <path d="M4 17l5-5 4 4 3-3 4 4" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
                       </svg>
                       <div>
                         <p className="text-sm font-semibold text-ink">
                           파일을 드래그하거나 클릭해서 업로드
                         </p>
-                        <p className="mt-1.5 text-xs text-ink-faint">
+                        <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">
                           JPG · PNG · WebP, 최대 10MB
                           <br />
                           업로드 시 1024px로 자동 최적화됩니다
@@ -325,7 +301,7 @@ export default function Studio() {
                       <button
                         onClick={resetAll}
                         title="사진 삭제"
-                        className="absolute right-3 top-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-ink/75 text-paper backdrop-blur-sm transition-all duration-200 hover:bg-ink active:scale-95"
+                        className="absolute right-3 top-3 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-ink/70 text-paper backdrop-blur-md transition-all duration-200 hover:bg-ink hover:scale-110 active:scale-95"
                       >
                         ✕
                       </button>
@@ -334,10 +310,10 @@ export default function Studio() {
                 </div>
 
                 {/* 02+03. 옵션 */}
-                <div className="flex flex-col gap-8">
-                  <div className="flex flex-col gap-3">
-                    <label className="flex items-baseline gap-2 text-base font-bold text-ink">
-                      <span className="font-display text-sm text-clay">02</span>
+                <div className="flex flex-col gap-9">
+                  <div className="flex flex-col gap-4">
+                    <label className="flex items-baseline gap-2.5 text-[15px] font-bold text-ink">
+                      <span className="font-display text-[13px] text-ink-faint">02</span>
                       공간 유형
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -348,10 +324,10 @@ export default function Studio() {
                             setSelectedRoom(room.id);
                             setErrorMsg(null);
                           }}
-                          className={`cursor-pointer rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${
+                          className={`cursor-pointer rounded-full px-5 py-2.5 text-[13px] font-semibold transition-all duration-200 ${
                             selectedRoom === room.id
-                              ? 'bg-ink text-paper shadow-lift'
-                              : 'border border-line bg-paper text-ink-soft hover:border-line-strong hover:text-ink'
+                              ? 'bg-ink text-paper shadow-xs'
+                              : 'border border-line bg-paper text-ink-soft hover:border-ink-faint hover:text-ink'
                           }`}
                         >
                           {room.label}
@@ -360,9 +336,9 @@ export default function Studio() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-3">
-                    <label className="flex items-baseline gap-2 text-base font-bold text-ink">
-                      <span className="font-display text-sm text-clay">03</span>
+                  <div className="flex flex-col gap-4">
+                    <label className="flex items-baseline gap-2.5 text-[15px] font-bold text-ink">
+                      <span className="font-display text-[13px] text-ink-faint">03</span>
                       디자인 스타일
                     </label>
                     <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
@@ -373,22 +349,11 @@ export default function Studio() {
                             setSelectedStyle(style.id);
                             setErrorMsg(null);
                           }}
-                          className={`flex cursor-pointer flex-col items-start gap-2 rounded-xl border p-3.5 text-left transition-all duration-200 ${
-                            selectedStyle === style.id
-                              ? 'border-clay bg-clay-soft shadow-lift'
-                              : 'border-line bg-paper hover:-translate-y-0.5 hover:border-line-strong'
-                          }`}
+                          data-selected={selectedStyle === style.id ? 'true' : undefined}
+                          className="card-tactile flex cursor-pointer flex-col items-start gap-2.5 rounded-xl border border-line bg-paper p-4 text-left"
                         >
-                          <span className="flex items-center gap-1">
-                            {style.swatch.map((color) => (
-                              <span
-                                key={color}
-                                className="h-3 w-3 rounded-full border border-ink/10"
-                                style={{ backgroundColor: color }}
-                              />
-                            ))}
-                          </span>
-                          <span className="text-xs font-bold text-ink sm:text-sm">
+                          <span className="text-2xl">{style.emoji}</span>
+                          <span className="text-[12px] font-bold text-ink sm:text-[13px]">
                             {style.label}
                           </span>
                         </button>
@@ -399,66 +364,12 @@ export default function Studio() {
 
                 {/* BYOK + 에러 + 생성 버튼 (전체 폭) */}
                 <div className="flex flex-col gap-5 lg:col-span-2">
-                  <div className="rounded-2xl border border-line bg-paper p-5">
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <p className="text-sm font-bold text-ink">내 API 키로 무제한 사용</p>
-                        <p className="mt-0.5 text-xs text-ink-soft">
-                          무료 Gemini API 키를 등록하면 횟수 제한 없이 이용할 수 있습니다.
-                        </p>
-                      </div>
-                      <button
-                        onClick={handleByokToggle}
-                        role="switch"
-                        aria-checked={byokMode}
-                        aria-label="내 API 키로 무제한 사용"
-                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay ${
-                          byokMode ? 'bg-clay' : 'bg-line-strong'
-                        }`}
-                      >
-                        <span
-                          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-paper-raised shadow transition duration-200 ${
-                            byokMode ? 'translate-x-5' : 'translate-x-0'
-                          }`}
-                        />
-                      </button>
-                    </div>
 
-                    {byokMode && (
-                      <div className="mt-4 flex flex-col gap-2 border-t border-line pt-4 animate-fade-in">
-                        <div className="flex items-center justify-between text-xs">
-                          <label htmlFor="byok-key" className="font-semibold text-ink-soft">
-                            개인 Gemini API Key
-                          </label>
-                          <a
-                            href="https://aistudio.google.com/apikey"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-bold text-clay underline underline-offset-2"
-                          >
-                            무료 API 키 발급 (1분)
-                          </a>
-                        </div>
-                        <input
-                          id="byok-key"
-                          type="password"
-                          value={byokKey}
-                          onChange={(e) => setByokKey(e.target.value)}
-                          placeholder="AI Studio에서 복사한 API Key를 입력해 주세요"
-                          className="w-full rounded-xl border border-line bg-paper-raised px-4 py-3 text-sm text-ink placeholder-ink-faint transition-colors focus:border-clay focus:outline-none"
-                        />
-                        <p className="text-[10px] leading-relaxed text-ink-faint">
-                          ※ 입력된 API 키는 브라우저 로컬 스토리지에만 보관되며, 서버 로그나 다른
-                          곳에 절대 저장되지 않습니다.
-                        </p>
-                      </div>
-                    )}
-                  </div>
 
                   {errorMsg && (
                     <div
                       role="alert"
-                      className="rounded-xl border border-clay/30 bg-clay-soft p-4 text-xs leading-relaxed text-clay-deep"
+                      className="rounded-xl border border-ink/10 bg-sand p-4 text-[12px] leading-relaxed text-ink animate-fade-in"
                     >
                       {errorMsg}
                     </div>
@@ -467,22 +378,22 @@ export default function Studio() {
                   <button
                     onClick={handleGenerate}
                     disabled={isLoading || !uploadedImage}
-                    className={`w-full rounded-2xl py-4 text-base font-bold transition-all duration-300 ${
+                    className={`btn-premium w-full rounded-2xl py-4 text-[15px] font-bold ${
                       isLoading || !uploadedImage
                         ? 'cursor-not-allowed bg-sand text-ink-faint'
-                        : 'cursor-pointer bg-ink text-paper shadow-lift hover:-translate-y-0.5 hover:bg-clay active:scale-[0.99]'
+                        : 'cursor-pointer bg-ink text-paper shadow-lift hover:shadow-deep'
                     }`}
                   >
                     {isLoading ? '새로운 인테리어 생성 중...' : '인테리어 디자인 생성하기'}
                   </button>
 
                   {isLoading && (
-                    <div className="flex flex-col items-center gap-4 rounded-2xl border border-line bg-paper py-8">
-                      <div className="flex items-center gap-2">
+                    <div className="flex flex-col items-center gap-5 rounded-2xl border border-line bg-paper py-10 animate-fade-in">
+                      <div className="flex items-center gap-2.5">
                         {[0, 150, 300].map((delay) => (
                           <span
                             key={delay}
-                            className="h-2 w-2 animate-bounce rounded-full bg-clay"
+                            className="h-2 w-2 animate-bounce rounded-full bg-ink"
                             style={{ animationDelay: `${delay}ms` }}
                           />
                         ))}
@@ -490,7 +401,7 @@ export default function Studio() {
                       <p className="text-sm font-semibold text-ink" aria-live="polite">
                         {LOADING_STATUSES[loadingStep]}
                       </p>
-                      <p className="text-xs text-ink-faint">
+                      <p className="text-[11px] text-ink-faint">
                         첫 생성에는 약 10초가 소요됩니다. 잠시만 기다려 주세요.
                       </p>
                     </div>
