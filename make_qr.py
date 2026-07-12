@@ -1,7 +1,9 @@
 import qrcode
 from PIL import Image
 
-url = "https://pnk-reroom.vercel.app"
+url = "https://pnk-re-room.vercel.app"
+print(f"Generating QR code for production URL: {url}")
+
 logo_path = "public/logo.jpg"
 output_path = "public/qr_with_logo.png"
 
