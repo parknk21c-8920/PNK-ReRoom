@@ -24,9 +24,11 @@ export default function Faq() {
     <section className="w-full border-t border-line bg-paper-raised">
       <div className="mx-auto max-w-3xl px-6 py-28">
         <Reveal>
-          <p className="text-center text-[10px] font-bold uppercase tracking-[0.28em] text-ink-faint">
-            FAQ
-          </p>
+          <div className="flex justify-center">
+            <span className="inline-block w-fit rounded-full border border-line-strong bg-white px-4 py-1.5 text-[13px] font-bold uppercase tracking-widest text-ink shadow-sm">
+              FAQ
+            </span>
+          </div>
           <h2 className="font-display mt-4 text-center text-3xl font-bold tracking-[-0.02em] text-ink md:text-[2.5rem]">
             자주 묻는 질문
           </h2>

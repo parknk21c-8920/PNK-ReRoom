@@ -23,9 +23,9 @@ export default function HowItWorks() {
     <section id="how-it-works" className="w-full border-t border-line">
       <div className="mx-auto max-w-6xl px-6 py-28">
         <Reveal>
-          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-ink-faint">
-            How it works
-          </p>
+          <span className="inline-block w-fit rounded-full bg-emerald-500 px-4 py-1.5 text-[13px] font-bold uppercase tracking-widest text-white shadow-sm">
+            HOW TO
+          </span>
           <h2 className="font-display mt-4 text-3xl font-bold tracking-[-0.02em] text-ink md:text-[2.5rem]">
             세 단계면 충분합니다
           </h2>

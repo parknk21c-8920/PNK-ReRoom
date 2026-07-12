@@ -166,9 +166,9 @@ export default function Studio() {
       <div className="mx-auto max-w-6xl px-6 py-28">
         <Reveal>
           <div className="flex flex-col">
-            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-ink-faint">
-              Studio
-            </p>
+            <span className="inline-block w-fit rounded-full bg-ink px-4 py-1.5 text-[13px] font-bold uppercase tracking-widest text-paper shadow-sm">
+              STUDIO
+            </span>
             <h2 className="font-display mt-4 text-3xl font-bold tracking-[-0.02em] text-ink md:text-[2.5rem]">
               나의 리디자인 스튜디오
             </h2>
