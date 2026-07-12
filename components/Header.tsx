@@ -14,28 +14,28 @@ export default function Header() {
         </a>
 
         {/* 내비게이션 */}
-        <nav className="flex items-center gap-2 text-[13px] font-bold">
+        <nav className="flex items-center gap-1.5 text-[11px] sm:text-[13px] font-bold sm:gap-2">
           <a
             href="#styles"
-            className="hidden rounded-full bg-orange-500 px-4 py-2 text-white shadow-xs transition-all duration-200 hover:bg-orange-600 sm:block"
+            className="rounded-full bg-orange-500 px-2.5 py-1.5 sm:px-4 sm:py-2 text-white shadow-xs transition-all duration-200 hover:bg-orange-600"
           >
             STYLES
           </a>
           <a
             href="#how-it-works"
-            className="hidden rounded-full bg-emerald-500 px-4 py-2 text-white shadow-xs transition-all duration-200 hover:bg-emerald-600 sm:block"
+            className="rounded-full bg-emerald-500 px-2.5 py-1.5 sm:px-4 sm:py-2 text-white shadow-xs transition-all duration-200 hover:bg-emerald-600"
           >
             HOW TO
           </a>
           <a
             href="#studio"
-            className="btn-premium rounded-full bg-ink px-5 py-2 font-semibold text-paper shadow-xs hover:shadow-lift"
+            className="btn-premium rounded-full bg-ink px-3 py-1.5 sm:px-5 sm:py-2 font-semibold text-paper shadow-xs hover:shadow-lift"
           >
             STUDIO
           </a>
           <a
             href="#faq"
-            className="hidden ml-1 rounded-full border border-line-strong bg-white px-4 py-2 text-ink shadow-xs transition-all duration-200 hover:border-ink sm:block"
+            className="rounded-full border border-line-strong bg-white px-2.5 py-1.5 sm:px-4 sm:py-2 text-ink shadow-xs transition-all duration-200 hover:border-ink"
           >
             FAQ
           </a>
