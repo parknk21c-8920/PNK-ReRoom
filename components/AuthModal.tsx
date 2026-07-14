@@ -31,17 +31,27 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         setTimeout(onClose, 500);
       }
     } else {
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) {
-        setMessage('회원가입 실패: ' + error.message);
+      // 우회 API를 통한 자동 승인 회원가입
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage('회원가입 실패: ' + (data.error || '알 수 없는 오류'));
       } else {
-        setMessage('가입 완료! 이메일로 전송된 인증 링크를 꼭 클릭하신 후 로그인해주세요.');
-        // 1.5초 뒤에 로그인 화면으로 자동 전환
-        setTimeout(() => {
-          setIsLogin(true);
-          setPassword(''); // 비밀번호 입력창 초기화
-          setMessage('이메일 인증을 완료하셨다면 로그인해 주세요.');
-        }, 1500);
+        setMessage('회원가입 완료! 자동 로그인 중...');
+        // 가입 완료 후 즉시 자동 로그인
+        const { error: loginError } = await supabase.auth.signInWithPassword({ email, password });
+        if (loginError) {
+          setMessage('자동 로그인 실패: ' + loginError.message);
+        } else {
+          setMessage('환영합니다! 로그인이 완료되었습니다.');
+          setTimeout(onClose, 500);
+        }
       }
     }
     setLoading(false);
