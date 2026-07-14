@@ -31,12 +31,17 @@ export default function Header() {
             {/* 모바일 전용 영역 (언어 토글, 배지, 로그인) */}
             <div className="flex items-center gap-1.5 md:hidden">
               {user ? (
-                <button
-                  onClick={signOut}
-                  className="rounded-full border border-line-strong bg-white px-2 py-1 text-[9px] font-bold text-ink shadow-sm transition-colors hover:border-ink"
-                >
-                  로그아웃
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <span className="rounded-full bg-blue-100 px-1.5 py-1 text-[9px] font-bold text-blue-800 border border-blue-200">
+                    💳 {credits}
+                  </span>
+                  <button
+                    onClick={signOut}
+                    className="rounded-full border border-line-strong bg-white px-2 py-1 text-[9px] font-bold text-ink shadow-sm transition-colors hover:border-ink"
+                  >
+                    로그아웃
+                  </button>
+                </div>
               ) : (
                 <button
                   onClick={() => setIsAuthOpen(true)}
