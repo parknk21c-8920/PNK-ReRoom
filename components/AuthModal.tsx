@@ -35,8 +35,13 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       if (error) {
         setMessage('회원가입 실패: ' + error.message);
       } else {
-        setMessage('가입 성공!');
-        setTimeout(onClose, 500);
+        setMessage('회원가입이 정상적으로 완료되었습니다. 로그인해 주세요.');
+        // 1초 뒤에 로그인 화면으로 자동 전환
+        setTimeout(() => {
+          setIsLogin(true);
+          setPassword(''); // 비밀번호 입력창 초기화
+          setMessage('가입하신 정보로 로그인해 주세요.');
+        }, 1500);
       }
     }
     setLoading(false);
