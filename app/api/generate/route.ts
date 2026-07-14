@@ -59,16 +59,16 @@ export async function POST(req: NextRequest) {
       auth: apiKey,
     });
 
-    // adirik/interior-design 모델 (ControlNet MLSD 기반) 호출
+    // adirik/interior-design 모델 (ControlNet MLSD 기반) 최신 버전 호출
     const output = await replicate.run(
-      "adirik/interior-design:76604baddc85b1b4616e1c6475ceea858cb665f7fed0a2701d37caa5eb5957e1",
+      "adirik/interior-design:76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38",
       {
         input: {
           image: image, // Base64 data URI
-          prompt: prompt,
-          a_prompt: "best quality, extremely detailed, photo from Pinterest, interior, cinematic lighting",
-          n_prompt: "longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality",
-          image_resolution: 512,
+          prompt: `${prompt}, best quality, extremely detailed, photo from Pinterest, interior, cinematic lighting`,
+          negative_prompt: "longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality",
+          guidance_scale: 15,
+          prompt_strength: 0.8
         }
       }
     );
