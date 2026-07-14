@@ -1,132 +1,106 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenAI } from '@google/genai';
+import Replicate from 'replicate';
 import { ROOM_TYPES, STYLES } from '@/lib/constants';
+import { createClient } from '@supabase/supabase-js';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   try {
-    // 요청 용량 제한 체크 (~8MB)
-    const contentLength = req.headers.get('content-length');
-    if (contentLength && parseInt(contentLength, 10) > 8 * 1024 * 1024) {
-      return NextResponse.json(
-        { error: '업로드 요청 크기가 제한(8MB)을 초과했습니다. 이미지 해상도를 줄여주세요.' },
-        { status: 413 }
-      );
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+    }
+
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('credits, id')
+      .single();
+
+    if (profileError || !profile) {
+      return NextResponse.json({ error: '사용자 정보를 확인할 수 없습니다.' }, { status: 401 });
+    }
+
+    if (profile.credits <= 0) {
+      return NextResponse.json({ error: '크레딧이 부족합니다. 요금제 페이지에서 충전해 주세요.', redirect: '/pricing' }, { status: 403 });
     }
 
     const { image, roomTypeId, styleId } = await req.json();
 
-    if (!image || typeof image !== 'string') {
+    if (!image || !roomTypeId || !styleId) {
       return NextResponse.json(
-        { error: '인테리어 디자인을 입힐 원본 방 사진을 업로드해 주세요.' },
+        { error: '필수 데이터(이미지, 공간, 스타일)가 누락되었습니다.' },
         { status: 400 }
       );
     }
 
-    const roomType = ROOM_TYPES.find((r) => r.id === roomTypeId);
-    const style = STYLES.find((s) => s.id === styleId);
-    if (!roomType || !style) {
-      return NextResponse.json(
-        { error: '공간 유형과 인테리어 스타일을 선택해 주세요.' },
-        { status: 400 }
-      );
-    }
+    const roomType = ROOM_TYPES.find(r => r.id === roomTypeId);
+    const style = STYLES.find(s => s.id === styleId);
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    // Replicate ControlNet용 프롬프트
+    const prompt = `A highly detailed, photorealistic interior design of a ${roomType?.prompt || 'room'}. Style: ${style?.prompt || 'modern'}. 8k resolution, highly detailed, beautiful lighting.`;
 
-    if (!apiKey || apiKey === 'your_gemini_api_key_here') {
+    const apiKey = process.env.REPLICATE_API_TOKEN;
+    if (!apiKey) {
       return NextResponse.json(
-        { error: '서버에 API 키가 설정되지 않았습니다. 관리자에게 문의해 주세요.' },
+        { error: '서버에 Replicate API 키가 설정되지 않았습니다. .env.local 파일을 확인해 주세요.' },
         { status: 500 }
       );
     }
 
-    // base64 및 mimeType 파싱
-    let mimeType = 'image/jpeg';
-    let base64Image = image;
-
-    if (image.startsWith('data:')) {
-      const match = image.match(/^data:([^;]+);base64,(.*)$/);
-      if (match) {
-        mimeType = match[1];
-        base64Image = match[2];
-      }
-    }
-
-    // 이미지 base64 바이트 사이즈 검증 (~8MB)
-    if (base64Image.length > 8 * 1024 * 1024 * 1.33) {
-      return NextResponse.json(
-        { error: '업로드 이미지 용량이 8MB를 초과합니다. 더 작은 이미지를 업로드해 주세요.' },
-        { status: 413 }
-      );
-    }
-
-    const instruction = `Redesign this ${roomType.prompt} interior in ${style.prompt}. Keep the room architecture — walls, windows, doors, ceiling and camera perspective — exactly the same. Replace furniture, lighting, color palette and decor to match the target style. Photorealistic interior photography, natural lighting, high detail.`;
-
-    const ai = new GoogleGenAI({ apiKey });
-    const res = await ai.models.generateContent({
-      model: 'gemini-3.1-flash-image-preview',
-      contents: [
-        {
-          role: 'user',
-          parts: [{ inlineData: { mimeType, data: base64Image } }, { text: instruction }],
-        },
-      ],
+    const replicate = new Replicate({
+      auth: apiKey,
     });
 
-    const candidate = res.candidates?.[0];
+    // adirik/interior-design 모델 (ControlNet MLSD 기반) 호출
+    const output = await replicate.run(
+      "adirik/interior-design:76604baddc85b1b4616e1c6475ceea858cb665f7fed0a2701d37caa5eb5957e1",
+      {
+        input: {
+          image: image, // Base64 data URI
+          prompt: prompt,
+          a_prompt: "best quality, extremely detailed, photo from Pinterest, interior, cinematic lighting",
+          n_prompt: "longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality",
+          image_resolution: 512,
+        }
+      }
+    );
 
-    if (candidate?.finishReason === 'SAFETY') {
+    // output은 대개 생성된 이미지 URL의 배열(보통 1개)을 반환합니다.
+    const resultImageUrl = Array.isArray(output) ? output[1] || output[0] : output;
+
+    if (!resultImageUrl) {
       return NextResponse.json(
-        { error: '안전 정책에 의해 이미지 생성이 차단되었습니다. 다른 사진을 사용해 주세요.' },
-        { status: 400 }
+        { error: '이미지 생성에 실패했습니다. 다른 이미지로 시도해 주세요.' },
+        { status: 500 }
       );
     }
 
-    const part = candidate?.content?.parts?.find((p) => p.inlineData);
-    const imageBase64 = part?.inlineData?.data;
+    // URL에서 이미지를 다운로드하여 base64로 변환 (기존 프론트엔드 호환성을 위해)
+    const imgRes = await fetch(resultImageUrl);
+    const arrayBuffer = await imgRes.arrayBuffer();
+    const base64Image = Buffer.from(arrayBuffer).toString('base64');
 
-    if (!imageBase64) {
-      return NextResponse.json(
-        { error: '이미지 생성이 실패했거나 차단되었습니다. 다른 공간 유형이나 스타일을 선택해 주세요.' },
-        { status: 400 }
-      );
-    }
+    // 💡 크레딧 차감 로직
+    await supabase.from('profiles').update({ credits: profile.credits - 1 }).eq('id', profile.id);
 
-    return NextResponse.json({ image: imageBase64 });
-  } catch (error) {
-    console.error('Gemini Generate API Error:', error);
-    const errMsg = error instanceof Error ? error.message : '';
-
-    if (
-      errMsg.includes('API_KEY_INVALID') ||
-      errMsg.includes('API key not valid') ||
-      errMsg.includes('invalid api key')
-    ) {
-      return NextResponse.json(
-        { error: 'API 키가 잘못되었습니다. 발급받은 유효한 API 키를 정확히 입력해 주세요.' },
-        { status: 401 }
-      );
-    }
-
-    if (errMsg.includes('RESOURCE_EXHAUSTED') || errMsg.includes('quota') || errMsg.includes('429')) {
-      return NextResponse.json(
-        { error: 'API 무료 요청 할당량을 초과했습니다. 잠시 후 다시 시도해 주세요.' },
-        { status: 429 }
-      );
-    }
-
-    if (errMsg.includes('SAFETY') || errMsg.includes('safety') || errMsg.includes('blocked')) {
-      return NextResponse.json(
-        { error: '안전 필터에 의해 생성이 거부되었습니다. 다른 사진이나 스타일로 시도해 주세요.' },
-        { status: 400 }
-      );
+    return NextResponse.json({ image: base64Image, credits: profile.credits - 1 });
+  } catch (error: any) {
+    console.error('Replicate API Error:', error);
+    
+    if (error?.message?.includes('Unauthenticated')) {
+      return NextResponse.json({ error: '올바르지 않은 Replicate API 키입니다.' }, { status: 401 });
     }
 
     return NextResponse.json(
-      { error: `인테리어 생성 실패: ${errMsg || '알 수 없는 서버 내부 오류'}` },
+      { error: '인테리어 생성 중 오류가 발생했습니다. (Replicate API)' },
       { status: 500 }
     );
   }

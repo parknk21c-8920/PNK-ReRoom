@@ -26,7 +26,7 @@ export default function Faq() {
   ];
 
   return (
-    <section className="w-full border-t border-line bg-paper-raised">
+    <section id="faq" className="w-full border-t border-line bg-paper-raised">
       <div className="mx-auto max-w-6xl px-6 py-28">
         <Reveal>
           <span className="inline-block w-fit rounded-full border border-line-strong bg-white px-4 py-1.5 text-[13px] font-bold uppercase tracking-widest text-ink shadow-sm">

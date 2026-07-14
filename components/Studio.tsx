@@ -6,6 +6,8 @@ import { ROOM_TYPES, STYLES } from '@/lib/constants';
 import CompareSlider from './CompareSlider';
 import Reveal from './Reveal';
 import { useLanguage } from './LanguageContext';
+import { useAuth } from './AuthContext';
+import { supabase } from '@/lib/supabase';
 
 export default function Studio() {
   const { lang, t } = useLanguage();
@@ -88,7 +90,18 @@ export default function Studio() {
     reader.readAsDataURL(file);
   };
 
+  const { user, credits, refreshCredits } = useAuth();
+
   const handleGenerate = async () => {
+    if (!user) {
+      setErrorMsg(t('로그인이 필요합니다. 상단 로그인 버튼을 눌러주세요.', 'Please log in to generate.'));
+      return;
+    }
+    if (credits <= 0) {
+      window.location.href = '/pricing';
+      return;
+    }
+
     if (!uploadedImage) {
       setErrorMsg(t('공간 인테리어를 위해 먼저 사진을 업로드해 주세요.', 'Please upload a photo first to redesign the space.'));
       return;
@@ -105,9 +118,15 @@ export default function Studio() {
     const startTime = Date.now();
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+
       const res = await fetch('/api/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
         body: JSON.stringify({
           image: uploadedImage,
           roomTypeId: selectedRoom,
@@ -117,11 +136,16 @@ export default function Studio() {
 
       const data = await res.json();
       if (!res.ok) {
+        if (data.redirect) {
+          window.location.href = data.redirect;
+          return;
+        }
         throw new Error(data.error || t('이미지 생성에 실패했습니다.', 'Failed to generate image.'));
       }
 
       setResultImage(`data:image/png;base64,${data.image}`);
       setGenerationTime(Number(((Date.now() - startTime) / 1000).toFixed(1)));
+      await refreshCredits();
 
     } catch (err) {
       console.error(err);

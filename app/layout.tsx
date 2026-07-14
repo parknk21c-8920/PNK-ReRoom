@@ -55,6 +55,7 @@ export const metadata: Metadata = {
 };
 
 import { LanguageProvider } from "@/components/LanguageContext";
+import { AuthProvider } from "@/components/AuthContext";
 
 export default function RootLayout({
   children,
@@ -64,9 +65,11 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`h-full antialiased ${notoSerif.variable}`}>
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">
-        <LanguageProvider>
-          {children}
-        </LanguageProvider>
+        <AuthProvider>
+          <LanguageProvider>
+            {children}
+          </LanguageProvider>
+        </AuthProvider>
       </body>
     </html>
   );
