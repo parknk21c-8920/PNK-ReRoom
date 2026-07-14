@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
     if (!authHeader) {
       return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
     }
+    const token = authHeader.replace('Bearer ', '');
 
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -19,12 +20,22 @@ export async function POST(req: NextRequest) {
       { global: { headers: { Authorization: authHeader } } }
     );
 
+    let userId: string;
+    try {
+      const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+      userId = payload.sub;
+    } catch (e) {
+      return NextResponse.json({ error: '유효하지 않은 토큰입니다.' }, { status: 401 });
+    }
+
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('credits, id')
+      .eq('id', userId)
       .single();
 
     if (profileError || !profile) {
+      console.error(`Supabase profile query error for userId ${userId}:`, profileError);
       return NextResponse.json({ error: '사용자 정보를 확인할 수 없습니다.' }, { status: 401 });
     }
 

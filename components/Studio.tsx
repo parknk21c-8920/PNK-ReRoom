@@ -257,9 +257,7 @@ export default function Studio() {
                   </label>
 
                   {!uploadedImage ? (
-                    <div
-                      role="button"
-                      tabIndex={0}
+                    <label
                       onDragOver={(e) => {
                         e.preventDefault();
                         setIsDragOver(true);
@@ -270,7 +268,6 @@ export default function Studio() {
                         setIsDragOver(false);
                         if (e.dataTransfer.files?.[0]) handleImageFile(e.dataTransfer.files[0]);
                       }}
-                      onClick={() => fileInputRef.current?.click()}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
@@ -315,7 +312,7 @@ export default function Studio() {
                           {t('업로드 시 1024px로 자동 최적화됩니다', 'Automatically optimized to 1024px upon upload')}
                         </p>
                       </div>
-                    </div>
+                    </label>
                   ) : (
                     <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-line shadow-lift">
                       <Image src={uploadedImage} alt={t('업로드한 공간 미리보기', 'Preview of uploaded space')} fill className="object-cover" />
