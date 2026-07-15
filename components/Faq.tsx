@@ -43,13 +43,13 @@ export default function Faq() {
               key={faq.q}
               className="group rounded-2xl border border-line bg-paper px-6 py-5 transition-all duration-300 hover:shadow-xs open:border-ink open:shadow-xs"
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[14px] font-semibold text-ink [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[16px] font-semibold text-ink sm:text-[18px] [&::-webkit-details-marker]:hidden">
                 {faq.q}
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-line text-sm font-light text-ink-faint transition-all duration-300 group-open:rotate-45 group-open:border-ink group-open:text-ink">
                   +
                 </span>
               </summary>
-              <p className="mt-4 text-[13px] leading-[1.8] text-ink-soft">{faq.a}</p>
+              <p className="mt-4 text-[14px] leading-[1.8] text-ink-soft sm:text-[16px]">{faq.a}</p>
             </details>
           ))}
         </Reveal>
