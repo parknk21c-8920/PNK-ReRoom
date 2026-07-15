@@ -102,7 +102,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ planId: str
           </p>
         </div>
 
-        <div className="w-full max-w-md bg-white p-8 rounded-3xl shadow-lg border border-line">
+        <div className="w-full max-w-md bg-paper p-8 rounded-3xl shadow-lg border border-line">
           {clientSecret ? (
             <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
               <CheckoutForm amount={plan.price} credits={plan.credits} />

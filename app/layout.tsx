@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Noto_Serif_KR } from "next/font/google";
+import { Noto_Serif_KR, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const notoSerif = Noto_Serif_KR({
   weight: ["400", "600", "700", "900"],
   subsets: ["latin"],
   variable: "--font-noto-serif",
+  display: "swap",
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  weight: ["400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  variable: "--font-jakarta",
   display: "swap",
 });
 
@@ -63,7 +70,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`h-full antialiased ${notoSerif.variable}`}>
+    <html lang="ko" className={`h-full antialiased ${notoSerif.variable} ${plusJakarta.variable}`}>
       <body className="min-h-full flex flex-col bg-paper text-ink font-sans">
         <AuthProvider>
           <LanguageProvider>

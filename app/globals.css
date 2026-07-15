@@ -2,27 +2,27 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── ReRoom AI 디자인 토큰 · 프리미엄 화이트 & 블랙 팔레트 ── */
-  --color-paper: #ffffff;
-  --color-paper-raised: #fafafa;
-  --color-sand: #f5f5f5;
-  --color-line: #ebebeb;
-  --color-line-strong: #d4d4d4;
-  --color-ink: #0a0a0a;
-  --color-ink-soft: #525252;
-  --color-ink-faint: #a3a3a3;
-  --color-accent: #0a0a0a;
-  --color-accent-hover: #262626;
-  --color-accent-soft: #f5f5f5;
+  /* ── ReRoom AI 디자인 토큰 · 네온 다크 팔레트 ── */
+  --color-paper: #090514; /* 아주 짙은 딥 퍼플/블랙 */
+  --color-paper-raised: #140d25;
+  --color-sand: #18102a;
+  --color-line: rgba(255, 255, 255, 0.1);
+  --color-line-strong: rgba(255, 255, 255, 0.2);
+  --color-ink: #ffffff;
+  --color-ink-soft: #a3a3a3;
+  --color-ink-faint: #525252;
+  --color-accent: #ffffff;
+  --color-accent-hover: #e5e5e5;
+  --color-accent-soft: #1e1e1e;
 
-  --font-sans: "Pretendard Variable", "Pretendard", -apple-system,
+  --font-sans: var(--font-jakarta), "Pretendard Variable", "Pretendard", -apple-system,
     BlinkMacSystemFont, system-ui, Roboto, sans-serif;
   --font-display: var(--font-noto-serif), "Noto Serif KR", ui-serif, serif;
 
-  /* ── 그림자 단계 (3-tier) ── */
-  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.04);
-  --shadow-lift: 0 1px 3px rgb(0 0 0 / 0.05), 0 8px 20px rgb(0 0 0 / 0.06);
-  --shadow-deep: 0 2px 8px rgb(0 0 0 / 0.07), 0 20px 56px rgb(0 0 0 / 0.10);
+  /* ── 그림자 단계 (Glassmorphism Soft Shadows) ── */
+  --shadow-xs: 0 2px 8px rgb(0 0 0 / 0.4);
+  --shadow-lift: 0 10px 30px rgb(0 0 0 / 0.5), 0 4px 12px rgb(0 0 0 / 0.3);
+  --shadow-deep: 0 20px 40px rgb(0 0 0 / 0.8), 0 0 40px rgba(255, 255, 255, 0.03); /* 은은한 네온 글로우 */
 
   /* ── 커브 ── */
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
@@ -83,7 +83,7 @@ body::after {
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.18;
+  opacity: 0.08;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -167,4 +167,30 @@ body::after {
 :focus-visible {
   outline: 2px solid var(--color-ink);
   outline-offset: 2px;
+}
+
+/* ── 네온 메시 그라데이션 배경 (Mesh Gradient) ── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -100px;
+  z-index: -1;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(120, 0, 255, 0.15), transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(255, 0, 128, 0.15), transparent 40%),
+    radial-gradient(circle at 50% -20%, rgba(0, 120, 255, 0.1), transparent 50%);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* ── 프리미엄 그라데이션 버튼 ── */
+.btn-gradient {
+  background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #ec4899 100%);
+  background-size: 200% 200%;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+.btn-gradient:hover {
+  background-position: right center;
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
 }

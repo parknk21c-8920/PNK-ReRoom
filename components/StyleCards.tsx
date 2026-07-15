@@ -20,7 +20,7 @@ export default function StyleCards() {
           <button
             type="button"
             onClick={() => pickStyle(style.id)}
-            className="card-tactile group flex h-full w-full cursor-pointer flex-col justify-between rounded-2xl border border-line bg-paper p-5 text-left sm:p-6"
+            className="card-tactile group flex h-full w-full cursor-pointer flex-col justify-between rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl hover:bg-white/10 hover:border-white/20 transition-all shadow-xs p-5 text-left sm:p-6"
           >
             {/* 이모지 — 호버 시 살짝 바운스 */}
             <span className="block text-3xl transition-transform duration-300 group-hover:scale-110 sm:text-4xl">

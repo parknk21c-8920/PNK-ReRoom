@@ -13,7 +13,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-line/60 bg-paper/80 backdrop-blur-xl backdrop-saturate-150">
+      <header className="sticky top-0 z-40 border-b border-line bg-black/60 backdrop-blur-2xl backdrop-saturate-200">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-3.5 md:flex-row md:px-6">
           
           {/* 로고 & 모바일 우측 영역 */}
@@ -32,12 +32,12 @@ export default function Header() {
             <div className="flex items-center gap-1.5 md:hidden">
               {user ? (
                 <div className="flex items-center gap-1.5">
-                  <span className="rounded-full bg-blue-100 px-1.5 py-1 text-[9px] font-bold text-blue-800 border border-blue-200">
+                  <span className="rounded-full bg-blue-900/30 px-1.5 py-1 text-[9px] font-bold text-blue-300 border border-blue-800/50">
                     💳 {credits}
                   </span>
                   <button
                     onClick={signOut}
-                    className="rounded-full border border-line-strong bg-white px-2 py-1 text-[9px] font-bold text-ink shadow-sm transition-colors hover:border-ink"
+                    className="rounded-full border border-line-strong bg-transparent px-2 py-1 text-[9px] font-bold text-ink shadow-sm transition-colors hover:border-ink hover:bg-white/5"
                   >
                     로그아웃
                   </button>
@@ -46,7 +46,7 @@ export default function Header() {
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => setIsAuthOpen(true)}
-                    className="rounded-full border border-line-strong bg-white px-2.5 py-1 text-[9px] font-bold text-ink shadow-sm transition-colors hover:border-ink"
+                    className="btn-gradient rounded-full px-3 py-1.5 text-[9px] font-bold shadow-sm transition-colors"
                   >
                     로그인
                   </button>
@@ -63,7 +63,7 @@ export default function Header() {
               </span>
               <button
                 onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}
-                className="flex items-center rounded-full border border-line-strong bg-white p-0.5 shadow-xs transition-colors"
+                className="flex items-center rounded-full border border-line-strong bg-transparent p-0.5 shadow-xs transition-colors hover:bg-white/5"
               >
                 <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold transition-all ${lang === 'ko' ? 'bg-ink text-white' : 'text-ink-soft hover:text-ink'}`}>KR</span>
                 <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold transition-all ${lang === 'en' ? 'bg-ink text-white' : 'text-ink-soft hover:text-ink'}`}>EN</span>
@@ -100,7 +100,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/#faq"
-                className="flex items-center justify-center rounded-full border border-line-strong bg-white py-2 text-ink shadow-xs transition-all duration-200 hover:border-ink md:px-4"
+                className="flex items-center justify-center rounded-full border border-line-strong bg-transparent py-2 text-ink shadow-xs transition-all duration-200 hover:border-ink hover:bg-white/5 md:px-4"
               >
                 FAQ
               </Link>
@@ -110,12 +110,12 @@ export default function Header() {
               {/* 유저 인증 버튼 & 크레딧 */}
               {user ? (
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-blue-100 px-3 py-1 text-[11px] font-bold text-blue-800 border border-blue-200">
+                  <span className="rounded-full bg-blue-900/30 px-3 py-1 text-[11px] font-bold text-blue-300 border border-blue-800/50">
                     💳 {credits} Credits
                   </span>
                   <button
                     onClick={signOut}
-                    className="rounded-full border border-line-strong bg-white px-3 py-1 text-[11px] font-bold text-ink shadow-sm transition-colors hover:border-ink"
+                    className="rounded-full border border-line-strong bg-transparent px-3 py-1 text-[11px] font-bold text-ink shadow-sm transition-colors hover:border-ink hover:bg-white/5"
                   >
                     로그아웃
                   </button>
@@ -124,7 +124,7 @@ export default function Header() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setIsAuthOpen(true)}
-                    className="rounded-full border border-line-strong bg-white px-4 py-1.5 text-[12px] font-bold text-ink shadow-sm transition-colors hover:border-ink"
+                    className="btn-gradient rounded-full px-5 py-2 text-[12px] font-bold shadow-sm transition-colors"
                   >
                     로그인
                   </button>
@@ -140,7 +140,7 @@ export default function Header() {
               {/* PC 전용 언어 토글 */}
               <button
                 onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')}
-                className="flex items-center rounded-full border border-line-strong bg-white p-0.5 shadow-sm transition-colors hover:border-ink"
+                className="flex items-center rounded-full border border-line-strong bg-transparent p-0.5 shadow-sm transition-colors hover:border-ink hover:bg-white/5"
               >
                 <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold transition-all ${lang === 'ko' ? 'bg-ink text-white shadow-xs' : 'text-ink-soft hover:text-ink'}`}>KR</span>
                 <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold transition-all ${lang === 'en' ? 'bg-ink text-white shadow-xs' : 'text-ink-soft hover:text-ink'}`}>EN</span>

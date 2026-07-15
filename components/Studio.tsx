@@ -197,7 +197,7 @@ export default function Studio() {
         </Reveal>
 
         <Reveal delay={100} className="mt-12">
-          <div className="rounded-3xl border border-line bg-paper-raised p-6 shadow-lift md:p-10">
+          <div className="rounded-[2rem] border border-white/10 bg-black/40 backdrop-blur-2xl p-6 shadow-deep md:p-10">
             {resultImage && uploadedImage ? (
               /* ── 생성 완료 결과 ── */
               <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-8 animate-fade-in">
@@ -228,7 +228,7 @@ export default function Studio() {
                 <div className="flex w-full flex-wrap justify-center gap-3">
                   <button
                     onClick={handleDownload}
-                    className="btn-premium cursor-pointer rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-paper shadow-lift hover:shadow-deep"
+                    className="btn-premium cursor-pointer rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-paper shadow-lift hover:shadow-deep transition-all"
                   >
                     {t('고화질 PNG 다운로드', 'Download High-Res PNG')}
                   </button>
@@ -277,7 +277,7 @@ export default function Studio() {
                       className={`flex aspect-[4/3] cursor-pointer flex-col items-center justify-center gap-5 rounded-2xl border-2 border-dashed p-8 text-center transition-all duration-300 ${
                         isDragOver
                           ? 'scale-[0.98] border-ink bg-accent-soft'
-                          : 'border-line-strong bg-paper hover:border-ink-faint hover:bg-sand/50'
+                          : 'border-line-strong bg-white/5 backdrop-blur-md hover:border-ink-faint hover:bg-white/10'
                       }`}
                     >
                       <input
@@ -345,7 +345,7 @@ export default function Studio() {
                           className={`cursor-pointer rounded-full px-5 py-2.5 text-[13px] font-semibold transition-all duration-200 ${
                             selectedRoom === room.id
                               ? 'bg-ink text-paper shadow-xs'
-                              : 'border border-line bg-paper text-ink-soft hover:border-ink-faint hover:text-ink'
+                              : 'border border-white/10 bg-white/5 backdrop-blur-sm text-ink-soft hover:border-ink-faint hover:text-ink hover:bg-white/10'
                           }`}
                         >
                           {lang === 'ko' ? room.label : room.labelEn}
@@ -368,7 +368,7 @@ export default function Studio() {
                             setErrorMsg(null);
                           }}
                           data-selected={selectedStyle === style.id ? 'true' : undefined}
-                          className="card-tactile flex cursor-pointer flex-col items-start gap-2.5 rounded-xl border border-line bg-paper p-4 text-left"
+                          className="card-tactile flex cursor-pointer flex-col items-start gap-2.5 rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-4 text-left shadow-xs"
                         >
                           <span className="text-2xl">{style.emoji}</span>
                           <span className="text-[12px] font-bold text-ink sm:text-[13px]">
@@ -395,17 +395,17 @@ export default function Studio() {
                   <button
                     onClick={handleGenerate}
                     disabled={isLoading || !uploadedImage}
-                    className={`btn-premium w-full rounded-2xl py-4 text-[15px] font-bold ${
+                    className={`btn-premium w-full rounded-2xl py-4 text-[15px] font-bold transition-all ${
                       isLoading || !uploadedImage
                         ? 'cursor-not-allowed bg-sand text-ink-faint'
-                        : 'cursor-pointer bg-ink text-paper shadow-lift hover:shadow-deep'
+                        : 'btn-gradient cursor-pointer'
                     }`}
                   >
                     {isLoading ? t('새로운 인테리어 생성 중...', 'Generating new interior...') : t('인테리어 디자인 생성하기', 'Generate Interior Design')}
                   </button>
 
                   {isLoading && (
-                    <div className="flex flex-col items-center gap-5 rounded-2xl border border-line bg-paper py-10 animate-fade-in">
+                    <div className="flex flex-col items-center gap-5 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md py-10 animate-fade-in shadow-xs">
                       <div className="flex items-center gap-2.5">
                         {[0, 150, 300].map((delay) => (
                           <span

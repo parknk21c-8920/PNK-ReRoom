@@ -56,7 +56,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-paper flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         
         {/* Error message at the top */}
@@ -79,7 +79,7 @@ export default function SignupPage() {
           회원가입
         </h2>
 
-        <div className="bg-white py-8 px-4 sm:px-10">
+        <div className="bg-paper-raised py-8 px-4 sm:px-10 border border-line rounded-lg">
           
           <div>
             <button
@@ -100,7 +100,7 @@ export default function SignupPage() {
                 <div className="w-full border-t border-gray-200" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500 font-medium">또는 이메일로 가입</span>
+                <span className="px-2 bg-paper-raised text-ink-soft font-medium">또는 이메일로 가입</span>
               </div>
             </div>
           </div>

@@ -56,7 +56,7 @@ export default function PricingPage() {
               className={`relative rounded-3xl p-8 flex flex-col justify-between ${
                 plan.popular 
                   ? 'bg-ink text-white shadow-2xl scale-105 border-2 border-emerald-500' 
-                  : 'bg-white text-ink border border-line shadow-lg'
+                  : 'bg-paper text-ink border border-line shadow-lg'
               }`}
             >
               {plan.popular && (
