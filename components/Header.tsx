@@ -21,7 +21,7 @@ export default function Header() {
             <a href="#top" className="group flex items-center justify-start gap-3">
               <img src="/qr_with_logo.png" alt="QR Logo" className="h-8 w-auto object-contain rounded-lg shadow-sm md:h-14" />
               <span className="font-display text-xl font-bold tracking-tight text-ink md:text-[28px]">
-                PNK Re-Room<span className="text-ink-faint">.</span>
+                PNK Re-Room
               </span>
               <span className="hidden rounded-full border border-line-strong px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.22em] text-ink-soft md:inline-block">
                 AI Beta
@@ -43,12 +43,20 @@ export default function Header() {
                   </button>
                 </div>
               ) : (
-                <button
-                  onClick={() => setIsAuthOpen(true)}
-                  className="rounded-full bg-ink px-2.5 py-1 text-[9px] font-bold text-white shadow-sm transition-colors hover:bg-ink-soft"
-                >
-                  로그인
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setIsAuthOpen(true)}
+                    className="rounded-full border border-line-strong bg-white px-2.5 py-1 text-[9px] font-bold text-ink shadow-sm transition-colors hover:border-ink"
+                  >
+                    로그인
+                  </button>
+                  <Link
+                    href="/signup"
+                    className="rounded-full bg-[#0095ff] px-2.5 py-1 text-[9px] font-bold text-white shadow-sm transition-colors hover:bg-blue-600"
+                  >
+                    회원가입
+                  </Link>
+                </div>
               )}
               <span className="rounded-full border border-line-strong px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-[0.22em] text-ink-soft">
                 AI Beta
@@ -113,12 +121,20 @@ export default function Header() {
                   </button>
                 </div>
               ) : (
-                <button
-                  onClick={() => setIsAuthOpen(true)}
-                  className="rounded-full bg-ink px-4 py-1.5 text-[12px] font-bold text-white shadow-sm transition-colors hover:bg-ink-soft"
-                >
-                  로그인 / 가입
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setIsAuthOpen(true)}
+                    className="rounded-full border border-line-strong bg-white px-4 py-1.5 text-[12px] font-bold text-ink shadow-sm transition-colors hover:border-ink"
+                  >
+                    로그인
+                  </button>
+                  <Link
+                    href="/signup"
+                    className="rounded-full bg-[#0095ff] px-4 py-1.5 text-[12px] font-bold text-white shadow-sm transition-colors hover:bg-blue-600"
+                  >
+                    회원가입
+                  </Link>
+                </div>
               )}
 
               {/* PC 전용 언어 토글 */}

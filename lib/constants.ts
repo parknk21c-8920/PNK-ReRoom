@@ -26,6 +26,10 @@ export const ROOM_TYPES: RoomType[] = [
   { id: "bathroom", label: "욕실", labelEn: "Bathroom", prompt: "bathroom" },
   { id: "study", label: "서재", labelEn: "Study", prompt: "home office / study room" },
   { id: "studio", label: "원룸", labelEn: "Studio", prompt: "studio apartment" },
+  { id: "cafe", label: "카페", labelEn: "Cafe", prompt: "cafe interior" },
+  { id: "kids_room", label: "아이방", labelEn: "Kids Room", prompt: "children's room / kids bedroom" },
+  { id: "dressing_room", label: "옷방", labelEn: "Dressing Room", prompt: "walk-in closet / dressing room" },
+  { id: "garage", label: "차고", labelEn: "Garage", prompt: "garage interior" },
 ];
 
 export const STYLES: StyleOption[] = [
@@ -108,6 +112,16 @@ export const STYLES: StyleOption[] = [
     descEn: "Luxurious and grand design",
     prompt:
       "luxury hotel lounge style: plush velvet seating, brass and marble details, layered ambient lighting, dark sophisticated palette",
+  },
+  {
+    id: "terrace",
+    label: "테라스",
+    labelEn: "Terrace",
+    emoji: "🪴",
+    desc: "자연과 어우러진 휴식 공간",
+    descEn: "Relaxing space blending with nature",
+    prompt:
+      "outdoor terrace style: airy and refreshing, patio furniture, potted plants and greenery, natural sunlight, relaxing outdoor vibe",
   },
 ];
 

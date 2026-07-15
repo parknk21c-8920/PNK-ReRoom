@@ -13,6 +13,20 @@ const plans = {
 
 export async function POST(req: Request) {
   try {
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+    }
+    const token = authHeader.replace('Bearer ', '');
+
+    let userId: string;
+    try {
+      const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+      userId = payload.sub;
+    } catch (e) {
+      return NextResponse.json({ error: '유효하지 않은 토큰입니다.' }, { status: 401 });
+    }
+
     const { planId } = await req.json();
     const plan = plans[planId as keyof typeof plans];
 
@@ -26,7 +40,8 @@ export async function POST(req: Request) {
       description: `PNK Re-Room AI 인테리어 생성 ${plan.credits}회 이용권`,
       metadata: {
         planId: planId,
-        credits: plan.credits
+        credits: plan.credits.toString(), // Stripe metadata values must be strings
+        userId: userId
       }
     });
 
